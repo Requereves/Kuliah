@@ -1,0 +1,316 @@
+# 1. GreenSky (BISA DI-RUN)
+
+```python
+class Pabrik:
+    def __init__(self, nama, emisi):
+        self.nama = nama
+        self.emisi = emisi
+
+
+def total_emisi(data, idx=0):
+    if idx == len(data):
+        return 0
+    return data[idx] + total_emisi(data, idx + 1)
+
+
+
+def rata_kawasan(pabrik):
+    total = 0
+    jumlah = 0
+
+    for p in pabrik:
+        for e in p.emisi:
+            total += e
+            jumlah += 1
+
+    return total / jumlah
+
+
+
+def cetak(pabrik):
+    print(f"Rata-rata Emisi Kawasan: {rata_kawasan(pabrik):.2f}")
+
+    for p in pabrik:
+        print(f"{p.nama} - Total Emisi: {total_emisi(p.emisi):.2f}")
+
+
+n, h = map(int, input().split())
+
+pabrik = []
+
+for i in range(n):
+    data = input().split()
+
+    nama = data[0]
+    emisi = list(map(float, data[1:]))
+
+    pabrik.append(Pabrik(nama, emisi))
+
+cetak(pabrik)
+```
+
+Contoh input:
+
+```python
+2 3
+A 10 20 30
+B 5 15 25
+```
+
+---
+
+# 2. Robot Mariana (BISA DI-RUN)
+
+```python
+class Robot:
+    def __init__(self, idrobot, tekanan):
+        self.idrobot = idrobot
+        self.tekanan = tekanan
+
+
+
+def tekanan_maks(robot):
+    maks = robot[0].tekanan[0]
+
+    for r in robot:
+        for t in r.tekanan:
+            if t > maks:
+                maks = t
+
+    return maks
+
+
+
+def tekanan_min(data, idx=0):
+    if idx == len(data) - 1:
+        return data[idx]
+
+    kecil = tekanan_min(data, idx + 1)
+
+    if data[idx] < kecil:
+        return data[idx]
+
+    return kecil
+
+
+
+def cetak(robot):
+    print(f"Tekanan Maksimum Global: {tekanan_maks(robot):.2f}")
+
+    for r in robot:
+        print(f"Probe {r.idrobot} - Tekanan Minimum: {tekanan_min(r.tekanan):.2f}")
+
+
+n, t = map(int, input().split())
+
+robot = []
+
+for i in range(n):
+    data = input().split()
+
+    idrobot = data[0]
+    tekanan = list(map(float, data[1:]))
+
+    robot.append(Robot(idrobot, tekanan))
+
+cetak(robot)
+```
+
+---
+
+# 3. NanoTech (BISA DI-RUN)
+
+```python
+class Batch:
+    def __init__(self, idbatch, skor):
+        self.idbatch = idbatch
+        self.skor = skor
+
+
+
+def persentase(batch, batas):
+    lolos = 0
+    total = 0
+
+    for b in batch:
+        for s in b.skor:
+            total += 1
+
+            if s >= batas:
+                lolos += 1
+
+    return (lolos / total) * 100
+
+
+
+def cek_flawless(data, batas, idx=0):
+    if idx == len(data):
+        return True
+
+    if data[idx] < batas:
+        return False
+
+    return cek_flawless(data, batas, idx + 1)
+
+
+
+def cetak(batch, batas):
+    print(f"Persentase Kelolosan Global: {persentase(batch, batas):.2f}%")
+
+    for b in batch:
+        if cek_flawless(b.skor, batas):
+            status = "FLAWLESS"
+        else:
+            status = "DEFECTIVE"
+
+        print(f"Batch {b.idbatch} - Status: {status}")
+
+
+n, c, batas = input().split()
+
+n = int(n)
+c = int(c)
+batas = float(batas)
+
+batch = []
+
+for i in range(n):
+    data = input().split()
+
+    idbatch = data[0]
+    skor = list(map(float, data[1:]))
+
+    batch.append(Batch(idbatch, skor))
+
+cetak(batch, batas)
+```
+
+---
+
+# 4. LogiTrack (BISA DI-RUN)
+
+```python
+class Truk:
+    def __init__(self, plat, bbm):
+        self.plat = plat
+        self.bbm = bbm
+
+
+
+def total_bbm(data):
+    total = 0
+
+    for x in data:
+        total += x
+
+    return total
+
+
+
+def terendah(truk):
+    kecil = total_bbm(truk[0].bbm)
+
+    for t in truk:
+        jumlah = total_bbm(t.bbm)
+
+        if jumlah < kecil:
+            kecil = jumlah
+
+    return kecil
+
+
+
+def hari_boros(data, batas, idx=0):
+    if idx == len(data):
+        return 0
+
+    if data[idx] > batas:
+        return 1 + hari_boros(data, batas, idx + 1)
+
+    return hari_boros(data, batas, idx + 1)
+
+
+
+def cetak(truk, batas):
+    print(f"Total BBM Terendah: {terendah(truk):.2f}")
+
+    for t in truk:
+        print(f"{t.plat} - Hari Boros: {hari_boros(t.bbm, batas)} hari")
+
+
+n, h, batas = input().split()
+
+n = int(n)
+h = int(h)
+batas = float(batas)
+
+truk = []
+
+for i in range(n):
+    data = input().split()
+
+    plat = data[0]
+    bbm = list(map(float, data[1:]))
+
+    truk.append(Truk(plat, bbm))
+
+cetak(truk, batas)
+```
+
+---
+
+# 5. ReadAloud (BISA DI-RUN)
+
+```python
+class User:
+    def __init__(self, nama, halaman):
+        self.nama = nama
+        self.halaman = halaman
+
+
+
+def total_literasi(user):
+    total = 0
+
+    for u in user:
+        for h in u.halaman:
+            total += h
+
+    return total
+
+
+
+def gagal(data, target, idx=0):
+    if idx == len(data):
+        return 0
+
+    if data[idx] < target:
+        return idx + 1
+
+    return gagal(data, target, idx + 1)
+
+
+
+def cetak(user, target):
+    print(f"Total Literasi Platform: {total_literasi(user):.2f} Halaman")
+
+    for u in user:
+        print(f"{u.nama} - Gagal pada hari ke: {gagal(u.halaman, target)}")
+
+
+n, h, target = input().split()
+
+n = int(n)
+h = int(h)
+target = float(target)
+
+user = []
+
+for i in range(n):
+    data = input().split()
+
+    nama = data[0]
+    halaman = list(map(float, data[1:]))
+
+    user.append(User(nama,
+```

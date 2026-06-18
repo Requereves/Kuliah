@@ -1,0 +1,575 @@
+# Jawaban Tugas
+
+## 1. Aplikasi Simulasi Perdagangan Kripto Sederhana
+
+### A. Analisis Kebutuhan
+
+Aplikasi digunakan untuk simulasi jual beli aset kripto secara virtual.
+
+### Data yang Digunakan
+
+* Daftar aset kripto
+* Saldo pengguna
+* Riwayat transaksi
+
+### Fitur Utama
+
+1. Tambah aset kripto
+2. Ubah aset kripto
+3. Hapus aset kripto
+4. Beli aset kripto
+5. Jual aset kripto
+6. Tampilkan riwayat transaksi
+7. Sequential Search
+8. Binary Search
+9. Selection Sort
+10. Insertion Sort
+
+---
+
+# Implementasi Program Python
+
+```python
+class Kripto:
+    def __init__(self, nama, harga, marketcap):
+        self.nama = nama
+        self.harga = harga
+        self.marketcap = marketcap
+
+
+aset = [
+    Kripto("Bitcoin", 1000000, 5000),
+    Kripto("Ethereum", 500000, 3000),
+    Kripto("Solana", 250000, 2000)
+]
+
+saldo = 5000000
+riwayat = []
+
+
+# =========================
+# CRUD ASET
+# =========================
+def tambah_aset():
+    nama = input("Nama aset: ")
+    harga = int(input("Harga aset: "))
+    marketcap = int(input("Market cap: "))
+
+    aset.append(Kripto(nama, harga, marketcap))
+    print("Aset berhasil ditambahkan")
+
+
+def tampilkan_aset():
+    print("\nDaftar Aset")
+    for i, a in enumerate(aset):
+        print(f"{i+1}. {a.nama} | Harga: {a.harga} | MarketCap: {a.marketcap}")
+
+
+def ubah_aset():
+    tampilkan_aset()
+    index = int(input("Pilih nomor aset: ")) - 1
+
+    aset[index].nama = input("Nama baru: ")
+    aset[index].harga = int(input("Harga baru: "))
+    aset[index].marketcap = int(input("MarketCap baru: "))
+
+    print("Data berhasil diubah")
+
+
+def hapus_aset():
+    tampilkan_aset()
+    index = int(input("Pilih nomor aset yang dihapus: ")) - 1
+
+    del aset[index]
+    print("Aset berhasil dihapus")
+
+
+# =========================
+# TRANSAKSI
+# =========================
+def beli_aset():
+    global saldo
+
+    tampilkan_aset()
+    index = int(input("Pilih aset: ")) - 1
+    jumlah = int(input("Jumlah beli: "))
+
+    total = aset[index].harga * jumlah
+
+    if saldo >= total:
+        saldo -= total
+        riwayat.append(f"Beli {aset[index].nama} sebanyak {jumlah}")
+        print("Pembelian berhasil")
+    else:
+        print("Saldo tidak cukup")
+
+
+
+def jual_aset():
+    global saldo
+
+    tampilkan_aset()
+    index = int(input("Pilih aset: ")) - 1
+    jumlah = int(input("Jumlah jual: "))
+
+    total = aset[index].harga * jumlah
+    saldo += total
+
+    riwayat.append(f"Jual {aset[index].nama} sebanyak {jumlah}")
+    print("Penjualan berhasil")
+
+
+# =========================
+# RIWAYAT
+# =========================
+def tampilkan_riwayat():
+    print("\nRiwayat Transaksi")
+
+    if len(riwayat) == 0:
+        print("Belum ada transaksi")
+    else:
+        for r in riwayat:
+            print(r)
+
+
+# =========================
+# SEARCHING
+# =========================
+def sequential_search(nama):
+    for a in aset:
+        if a.nama.lower() == nama.lower():
+            return a
+    return None
+
+
+# Binary Search
+# Data harus diurutkan dulu
+
+def binary_search(nama):
+    left = 0
+    right = len(aset) - 1
+
+    while left <= right:
+        mid = (left + right) // 2
+
+        if aset[mid].nama.lower() == nama.lower():
+            return aset[mid]
+
+        elif aset[mid].nama.lower() < nama.lower():
+            left = mid + 1
+
+        else:
+            right = mid - 1
+
+    return None
+
+
+# =========================
+# SORTING
+# =========================
+# Selection Sort berdasarkan harga
+
+def selection_sort_harga():
+    n = len(aset)
+
+    for i in range(n):
+        min_index = i
+
+        for j in range(i+1, n):
+            if aset[j].harga < aset[min_index].harga:
+                min_index = j
+
+        aset[i], aset[min_index] = aset[min_index], aset[i]
+
+
+# Insertion Sort berdasarkan market cap
+
+def insertion_sort_marketcap():
+    for i in range(1, len(aset)):
+        key = aset[i]
+        j = i - 1
+
+        while j >= 0 and aset[j].marketcap > key.marketcap:
+            aset[j+1] = aset[j]
+            j -= 1
+
+        aset[j+1] = key
+
+
+# =========================
+# MENU
+# =========================
+while True:
+    print("\n=== SIMULASI KRIPTO ===")
+    print("1. Tambah aset")
+    print("2. Ubah aset")
+    print("3. Hapus aset")
+    print("4. Tampilkan aset")
+    print("5. Beli aset")
+    print("6. Jual aset")
+    print("7. Riwayat transaksi")
+    print("8. Sequential Search")
+    print("9. Binary Search")
+    print("10. Selection Sort Harga")
+    print("11. Insertion Sort MarketCap")
+    print("12. Saldo")
+    print("0. Keluar")
+
+    pilih = int(input("Pilih menu: "))
+
+    if pilih == 1:
+        tambah_aset()
+
+    elif pilih == 2:
+        ubah_aset()
+
+    elif pilih == 3:
+        hapus_aset()
+
+    elif pilih == 4:
+        tampilkan_aset()
+
+    elif pilih == 5:
+        beli_aset()
+
+    elif pilih == 6:
+        jual_aset()
+
+    elif pilih == 7:
+        tampilkan_riwayat()
+
+    elif pilih == 8:
+        nama = input("Cari aset: ")
+        hasil = sequential_search(nama)
+
+        if hasil:
+            print(hasil.nama, hasil.harga)
+        else:
+            print("Tidak ditemukan")
+
+    elif pilih == 9:
+        selection_sort_harga()
+
+        nama = input("Cari aset: ")
+        hasil = binary_search(nama)
+
+        if hasil:
+            print(hasil.nama, hasil.harga)
+        else:
+            print("Tidak ditemukan")
+
+    elif pilih == 10:
+        selection_sort_harga()
+        print("Data berhasil diurutkan berdasarkan harga")
+
+    elif pilih == 11:
+        insertion_sort_marketcap()
+        print("Data berhasil diurutkan berdasarkan marketcap")
+
+    elif pilih == 12:
+        print("Saldo:", saldo)
+
+    elif pilih == 0:
+        print("Program selesai")
+        break
+
+    else:
+        print("Menu tidak tersedia")
+```
+
+---
+
+# Penjelasan Algoritma
+
+## 1. Sequential Search
+
+Mencari data satu per satu dari awal hingga akhir.
+
+## 2. Binary Search
+
+Mencari data dengan membagi data menjadi dua bagian.
+Data harus sudah terurut.
+
+## 3. Selection Sort
+
+Mengurutkan data dengan mencari nilai terkecil lalu ditukar.
+
+## 4. Insertion Sort
+
+Mengurutkan data dengan menyisipkan elemen ke posisi yang benar.
+
+---
+
+# Kesimpulan
+
+Program simulasi perdagangan kripto dapat digunakan untuk:
+
+* Mengelola data aset kripto
+* Simulasi jual beli
+* Menyimpan riwayat transaksi
+* Melakukan searching dan sorting
+
+# 2. Aplikasi Analisis Sentimen Komentar Media Sosial
+
+## Deskripsi
+
+Program digunakan untuk menganalisis komentar media sosial berdasarkan sentimen positif, negatif, dan netral.
+
+---
+
+# Implementasi Program Python
+
+```python
+class Komentar:
+    def __init__(self, teks, sentimen):
+        self.teks = teks
+        self.sentimen = sentimen
+
+
+komentar_list = []
+
+positif = ["bagus", "keren", "mantap", "baik"]
+negatif = ["jelek", "buruk", "benci", "parah"]
+
+
+# =========================
+# ANALISIS SENTIMEN
+# =========================
+def analisis_sentimen(teks):
+    teks = teks.lower()
+
+    skor_positif = 0
+    skor_negatif = 0
+
+    for kata in positif:
+        if kata in teks:
+            skor_positif += 1
+
+    for kata in negatif:
+        if kata in teks:
+            skor_negatif += 1
+
+    if skor_positif > skor_negatif:
+        return "Positif"
+
+    elif skor_negatif > skor_positif:
+        return "Negatif"
+
+    else:
+        return "Netral"
+
+
+# =========================
+# CRUD KOMENTAR
+# =========================
+def tambah_komentar():
+    teks = input("Masukkan komentar: ")
+    hasil = analisis_sentimen(teks)
+
+    komentar_list.append(Komentar(teks, hasil))
+
+    print("Komentar berhasil ditambahkan")
+
+
+
+def tampilkan_komentar():
+    for i, k in enumerate(komentar_list):
+        print(f"{i+1}. {k.teks} | {k.sentimen}")
+
+
+
+def ubah_komentar():
+    tampilkan_komentar()
+
+    index = int(input("Pilih nomor komentar: ")) - 1
+    teks_baru = input("Komentar baru: ")
+
+    komentar_list[index].teks = teks_baru
+    komentar_list[index].sentimen = analisis_sentimen(teks_baru)
+
+    print("Komentar berhasil diubah")
+
+
+
+def hapus_komentar():
+    tampilkan_komentar()
+
+    index = int(input("Pilih nomor komentar: ")) - 1
+    del komentar_list[index]
+
+    print("Komentar berhasil dihapus")
+
+
+# =========================
+# SEARCHING
+# =========================
+def sequential_search(keyword):
+    hasil = []
+
+    for k in komentar_list:
+        if keyword.lower() in k.teks.lower():
+            hasil.append(k)
+
+    return hasil
+
+
+# Binary Search
+
+def binary_search(keyword):
+    left = 0
+    right = len(komentar_list) - 1
+
+    while left <= right:
+        mid = (left + right) // 2
+
+        if keyword.lower() == komentar_list[mid].teks.lower():
+            return komentar_list[mid]
+
+        elif keyword.lower() > komentar_list[mid].teks.lower():
+            left = mid + 1
+
+        else:
+            right = mid - 1
+
+    return None
+
+
+# =========================
+# SORTING
+# =========================
+# Selection Sort berdasarkan panjang teks
+
+def selection_sort():
+    n = len(komentar_list)
+
+    for i in range(n):
+        min_index = i
+
+        for j in range(i+1, n):
+            if len(komentar_list[j].teks) < len(komentar_list[min_index].teks):
+                min_index = j
+
+        komentar_list[i], komentar_list[min_index] = komentar_list[min_index], komentar_list[i]
+
+
+# Insertion Sort berdasarkan sentimen
+
+def insertion_sort():
+    urutan = {
+        "Negatif": 0,
+        "Netral": 1,
+        "Positif": 2
+    }
+
+    for i in range(1, len(komentar_list)):
+        key = komentar_list[i]
+        j = i - 1
+
+        while j >= 0 and urutan[komentar_list[j].sentimen] > urutan[key.sentimen]:
+            komentar_list[j+1] = komentar_list[j]
+            j -= 1
+
+        komentar_list[j+1] = key
+
+
+# =========================
+# STATISTIK
+# =========================
+def statistik():
+    positif_count = 0
+    negatif_count = 0
+    netral_count = 0
+
+    for k in komentar_list:
+        if k.sentimen == "Positif":
+            positif_count += 1
+
+        elif k.sentimen == "Negatif":
+            negatif_count += 1
+
+        else:
+            netral_count += 1
+
+    print("Positif:", positif_count)
+    print("Negatif:", negatif_count)
+    print("Netral:", netral_count)
+
+
+# =========================
+# MENU
+# =========================
+while True:
+    print("\n=== ANALISIS SENTIMEN ===")
+    print("1. Tambah komentar")
+    print("2. Ubah komentar")
+    print("3. Hapus komentar")
+    print("4. Tampilkan komentar")
+    print("5. Sequential Search")
+    print("6. Binary Search")
+    print("7. Selection Sort")
+    print("8. Insertion Sort")
+    print("9. Statistik")
+    print("0. Keluar")
+
+    pilih = int(input("Pilih menu: "))
+
+    if pilih == 1:
+        tambah_komentar()
+
+    elif pilih == 2:
+        ubah_komentar()
+
+    elif pilih == 3:
+        hapus_komentar()
+
+    elif pilih == 4:
+        tampilkan_komentar()
+
+    elif pilih == 5:
+        keyword = input("Keyword: ")
+        hasil = sequential_search(keyword)
+
+        for h in hasil:
+            print(h.teks, "-", h.sentimen)
+
+    elif pilih == 6:
+        komentar_list.sort(key=lambda x: x.teks.lower())
+
+        keyword = input("Cari komentar: ")
+        hasil = binary_search(keyword)
+
+        if hasil:
+            print(hasil.teks, hasil.sentimen)
+        else:
+            print("Tidak ditemukan")
+
+    elif pilih == 7:
+        selection_sort()
+        print("Komentar berhasil diurutkan")
+
+    elif pilih == 8:
+        insertion_sort()
+        print("Komentar berhasil diurutkan berdasarkan sentimen")
+
+    elif pilih == 9:
+        statistik()
+
+    elif pilih == 0:
+        print("Program selesai")
+        break
+
+    else:
+        print("Menu tidak tersedia")
+```
+
+---
+
+# Kesimpulan
+
+Program analisis sentimen dapat digunakan untuk:
+
+* Mengelola komentar
+* Analisis sentimen sederhana
+* Searching komentar
+* Sorting komentar
+* Menampilkan statistik sentimen
